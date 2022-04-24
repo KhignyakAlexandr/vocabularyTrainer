@@ -1,0 +1,159 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Vocabulary Trainer</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Akshar&display=swap" rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+</head>
+
+<body>
+
+<!--<div class="card-header">-->
+<!--    <div class="card-title-wrapper">-->
+<!--        <input type="text" class="input-card input-card-half" value="Word">-->
+<!--        <input type="text" class="input-card input-card-half" value="Transcription">-->
+<!--    </div>-->
+<!--    <input type="text" class="input-card input-card-full" value="Definition">-->
+<!--</div>-->
+
+<!--<input type="text" class="input-card input-card-full" value="Definition">-->
+
+<div class="wrapper">
+    <div class="grid">
+        <div class="header-row">
+            <nav class="navbar">
+                <div class="navbar-brand">
+                    <img class="navbar-hamburger-btn" th:src="@{/img/hamburger_menu_icon.png}" alt="">
+                    <label class="navbar-label">VOCABULARY TRAINER</label>
+                </div>
+                <form class="navbar-search-form">
+                    <input class="navbar-search-input" type="search" placeholder="Search">
+                    <img class="navbar-search-btn" th:src="@{/img/search_icon.png}" alt="">
+                </form>
+            </nav>
+        </div>
+        <div class="content-row">
+            <div class="col" th:each="card, iCard: ${cards}">
+                <div class="card">
+                    <img class="card-menu-img card-menu-img-edit" onclick="changeMode(this)" th:src="@{/img/edit_icon.png}">
+                    <img class="card-menu-img card-menu-img-delete" th:src="@{/img/delete_icon.png}">
+                    <img class="card-img" th:src="${card.imageLinks[0].url}">
+                    <div class="card-header-content-wrapper">
+                        <ul class="part-of-speech-list">
+                            <li class="part-of-speech-item" th:each="meaning, iMean: ${card.meanings}">
+                                <button class="part-of-speech-btn" onclick="changePartOfSpeech(this)">
+                                    <input type="radio"
+                                           class="part-of-speech-radio"
+                                           th:if="${iMean.index == 0}"
+                                           th:name="'options' + (${iCard.index} + 1)"
+                                           th:id="'option' + (${iMean.index} + 1)"
+                                           th:text="${meaning.partOfSpeech}"
+                                           checked>
+                                    <input type="radio"
+                                           class="part-of-speech-radio"
+                                           th:if="${iMean.index != 0}"
+                                           th:name="'options' + (${iCard.index} + 1)"
+                                           th:id="'option' + (${iMean.index} + 1)"
+                                           th:text="${meaning.partOfSpeech}">
+                                </button>
+                            </li>
+                        </ul>
+                        <div class="card-header">
+                            <div class="card-title-wrapper">
+                                <h5 class="card-title" th:text="${card.word}"></h5>
+                                <h5 class="card-transcription" th:text="${card.transcription}"></h5>
+                            </div>
+                            <p class="card-definition" th:text="${card.meanings[0].definitions[0].text}"></p>
+                        </div>
+                    </div>
+                    <div class="card-middle-content-wrapper">
+                        <ul class="list-examples">
+                            <li class="list-examples-item" th:each="example: ${card.meanings[0].examples}"
+                                th:text="${example.text}">
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-footer-content-wrapper">
+                        <div class="card-footer">
+                            <button class="card-footer-btn learn-btn"> learn </button>
+                            <button class="card-footer-btn repetition-btn"> repetition </button>
+                            <button class="card-footer-btn known-btn"> known </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.container -->
+
+<script th:inline="javascript">
+
+    /*<![CDATA[*/
+        var cards = /*[[${cards}]]*/ null;
+    /*]]>*/
+
+
+    function changeMode(btn){
+
+    }
+
+    function changePartOfSpeech(btn) {
+
+        var input = $(btn).find(".part-of-speech-radio");
+        var partOfSpeech = $(input).closest(".active").trim();
+        var closeCard = $(input).closest(".card");
+        var definition = closeCard.find(".card-definition");
+        var list = closeCard.find(".list-examples");
+        var word = closeCard.find(".card-title").text().trim();
+
+        input.prop("checked", true);
+
+        setActiveButtonsClass();
+
+        cards.forEach(card => {
+            if (card.word === word) {
+                card.meanings.forEach(meaning => {
+                    if (meaning.partOfSpeech === partOfSpeech) {
+                        definition.text(meaning.definitions[0].text);
+                        list.children(".list-examples-item").remove();
+
+                        meaning.examples.forEach(example => {
+                            var divStr = "<li class='list-examples-item'>" + example.text + "</li>";
+                            var div = $(divStr);
+                            list.append(div[0]);
+                        });
+                    }
+                });
+            }
+        });
+    }
+
+    function setActiveButtonsClass() {
+        var inputs = $(".part-of-speech-btn").children();
+
+        inputs.each(function (){
+
+            btn = $(this).parent();
+
+            if ($(this).prop('checked')) {
+                $(btn).addClass("active");
+            } else {
+                $(btn).removeClass("active");
+            }
+        });
+    }
+
+    window.onload = function () {
+        setActiveButtonsClass();
+    };
+</script>
+</body>
+</html>

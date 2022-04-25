@@ -1,40 +1,39 @@
 package com.alexh.vocabtrainer.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Builder
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Meaning {
-    @Id
-    @Column(name = "id", nullable = false)
-    private Long id;
-
-    @ManyToOne
-    Card card;
+public class Meaning extends AbstractEntity{
 
     public String partOfSpeech;
 
-    @OneToMany
-    public List<Definition> definitions;
-    @OneToMany
-    public List<Example> examples;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "meaning_id", referencedColumnName = "id")
+    public Set<Definition> definitions;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "meaning_id", referencedColumnName = "id")
+    public Set<Example> examples;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "meaning_id", referencedColumnName = "id")
     public List<Synonym> synonyms;
-    @OneToMany
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "meaning_id", referencedColumnName = "id")
     public List<Antonym> antonyms;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @JsonIgnore
+    @ManyToOne(targetEntity = Card.class)
+    public Card card;
 }

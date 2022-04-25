@@ -3,6 +3,7 @@ package com.alexh.vocabtrainer.controller;
 import com.alexh.vocabtrainer.dtos.DictionaryDto;
 import com.alexh.vocabtrainer.entities.*;
 import com.alexh.vocabtrainer.repositories.CardRepository;
+import com.alexh.vocabtrainer.repositories.MeaningRepository;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
@@ -13,15 +14,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 public class MainController {
 
     @Autowired
     public CardRepository cardRepository;
+
+    @Autowired
+    public MeaningRepository meaningRepository;
+
+    private static final String MAIN_PAGE = "main";
+    private static final String CARDS_ATTR = "cards";
 
     List<ImageLink> parseImageLinksFromPexelsAPI(String responseBody) {
         List<ImageLink> imageLinks = new ArrayList<>();
@@ -75,8 +86,8 @@ public class MainController {
             String partOfSpeech = meaning.optString("partOfSpeech");
             List<Antonym> antonyms = new ArrayList<>();
             List<Synonym> synonyms = new ArrayList<>();
-            List<Definition> definitions = new ArrayList<>();
-            List<Example> examples = new ArrayList<>();
+            Set<Definition> definitions = new HashSet<>();
+            Set<Example> examples = new HashSet<>();
 
             JSONArray antonymsJson = meaning.getJSONArray("antonyms");
             for (int a = 0; a < antonymsJson.length(); a++) {
@@ -176,31 +187,17 @@ public class MainController {
                 .build();
     }
 
-    ArrayList<Card> createCards() {
-        ArrayList<Card> cards = new ArrayList<>();
-
-        cards.add(createCard("Hello"));
-        cards.add(createCard("Goodbye"));
-        cards.add(createCard("Like"));
-        cards.add(createCard("Angel"));
-        cards.add(createCard("Devil"));
-        cards.add(createCard("Maria"));
-        cards.add(createCard("Mother"));
-        cards.add(createCard("Sex"));
-        cards.add(createCard("Love"));
-        cards.add(createCard("Cat"));
-        cards.add(createCard("Dog"));
-        cards.add(createCard("Window"));
-
-        return cards;
-    }
-
     @GetMapping("/")
     public String main(Model model) {
-        ArrayList<Card> cards = createCards();
-
-        model.addAttribute("cards", cards);
-
-        return "main"; //view
+        List<Card> cards = cardRepository.findAll();
+        model.addAttribute(CARDS_ATTR, cards);
+        return MAIN_PAGE; //view
+    }
+    @GetMapping("/meaning")
+    @ResponseBody
+    public Meaning findExamples(@RequestParam("word") String word,
+                               @RequestParam("partOfSpeech") String partOfSpeech) {
+        Meaning meaning = meaningRepository.findByCardWordAndPartOfSpeech(word,partOfSpeech).get();
+        return meaning;
     }
 }

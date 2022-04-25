@@ -1,33 +1,22 @@
 package com.alexh.vocabtrainer.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 @Builder
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Definition {
-    @Id
-    @Column(name = "id", nullable = false)
-    private Long id;
-
-    @ManyToOne
-    public Meaning meaning;
+public class Definition extends AbstractEntity{
 
     public String text;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @JsonIgnore
+    @ManyToOne(targetEntity = Meaning.class)
+    public Meaning meaning;
 }

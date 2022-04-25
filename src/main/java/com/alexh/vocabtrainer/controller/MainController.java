@@ -32,6 +32,7 @@ public class MainController {
     public MeaningRepository meaningRepository;
 
     private static final String MAIN_PAGE = "main";
+    private static final String EMPTY_CARD_PAGE = "empty_card";
     private static final String CARDS_ATTR = "cards";
 
     List<ImageLink> parseImageLinksFromPexelsAPI(String responseBody) {
@@ -193,11 +194,16 @@ public class MainController {
         model.addAttribute(CARDS_ATTR, cards);
         return MAIN_PAGE; //view
     }
+
+    @GetMapping("/empty_card")
+    public String emptyCard(){
+        return EMPTY_CARD_PAGE;
+    }
+
     @GetMapping("/meaning")
     @ResponseBody
     public Meaning findExamples(@RequestParam("word") String word,
                                @RequestParam("partOfSpeech") String partOfSpeech) {
-        Meaning meaning = meaningRepository.findByCardWordAndPartOfSpeech(word,partOfSpeech).get();
-        return meaning;
+        return meaningRepository.findByCardWordAndPartOfSpeech(word,partOfSpeech).get();
     }
 }

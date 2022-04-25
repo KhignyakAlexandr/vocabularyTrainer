@@ -7,17 +7,29 @@ input[type='radio']{
     -webkit-appearance: none;
     appearance: none;
 }
-input-card{
+input.input-card{
     border: none;
     border-bottom: 1px solid #000;
     outline: none;
     background: transparent;
 }
-input-card-half{
+input.input-card-half{
     width: 100px;
 }
-input-card-full{
+input.input-card-full{
     width: 200px;
+}
+
+.dynamic-btm{
+    cursor: pointer;
+}
+.dynamic{
+    transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+    touch-action: manipulation;
+    will-change: transform;
+}
+.dynamic:hover{
+    transform: translateY(-2px);
 }
 
 .header-row{
@@ -38,7 +50,7 @@ input-card-full{
     padding-right: 5px;
 }
 
-.navbar-hamburger-btn{
+.navbar-hamburger-img{
     height: 30px;
     width: 30px;
     padding-left: 5px;
@@ -89,10 +101,6 @@ input-card-full{
     box-shadow: 0 0 5px 5px #212529, 0 0 0;
 }
 .card:hover{
-    transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
-    touch-action: manipulation;
-    will-change: transform;
-    transform: translateY(-2px);
     box-shadow: 0 0 15px 10px #212529, 0 0 0;
 }
 .card-menu-img{
@@ -100,14 +108,8 @@ input-card-full{
     top: 15px;
     width: 20px;
     height: 20px;
-    cursor: pointer;
-    transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
-    touch-action: manipulation;
-    will-change: transform;
 }
-.card-menu-img:hover{
-    transform: translateY(-2px);
-}
+
 .card-menu-img-edit{
     right: 40px;
 }
@@ -119,21 +121,23 @@ input-card-full{
     flex-direction: column;
 }
 .col{
-    width: 250px;
-    height: 530px;
+    width: 280px;
+    height: 550px;
     margin:20px;
 }
+.card-img-wrapper{
+    height: 200px;
+    border-bottom: 3px solid;
+}
 .card-img{
+    width: 100%;
+    height: 100%;
     border-top-right-radius: 25px;
     border-top-left-radius: 25px;
-    border-bottom: 3px solid;
 }
 .card-header {
     display: flex;
     flex-direction: column;
-}
-.card-definition{
-
 }
 .part-of-speech-list{
     display: flex;
@@ -151,14 +155,9 @@ input-card-full{
     margin-bottom: 5px;
     border: solid #000;
     border-radius: 10px;
-    transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
-    touch-action: manipulation;
-    will-change: transform;
 }
 .part-of-speech-btn:hover{
     background-color: cornsilk;
-    cursor: pointer;
-    transform: translateY(-1px);
 }
 .part-of-speech-btn.active{
     background-color: cornsilk;
@@ -206,14 +205,9 @@ input-card-full{
 .card-footer-btn{
     padding: 5px;
     border-radius: 10px;
-    transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
-    touch-action: manipulation;
-    will-change: transform;
-    cursor: pointer;
 }
 .card-footer-btn:hover {
     color: white;
-    transform: translateY(-2px);
 }
 
 .card-footer-btn:active {

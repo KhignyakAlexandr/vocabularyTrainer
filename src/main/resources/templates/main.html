@@ -15,22 +15,13 @@
 
 <body>
 
-<!--<div class="card-header">-->
-<!--    <div class="card-title-wrapper">-->
-<!--        <input type="text" class="input-card input-card-half" value="Word">-->
-<!--        <input type="text" class="input-card input-card-half" value="Transcription">-->
-<!--    </div>-->
-<!--    <input type="text" class="input-card input-card-full" value="Definition">-->
-<!--</div>-->
-
-<!--<input type="text" class="input-card input-card-full" value="Definition">-->
-
 <div class="wrapper">
     <div class="grid">
         <div class="header-row">
             <nav class="navbar">
                 <div class="navbar-brand">
-                    <img class="navbar-hamburger-btn" th:src="@{/img/hamburger_menu_icon.png}" alt="">
+                    <img class="dynamic dynamic-btm navbar-hamburger-img" th:src="@{/img/hamburger_menu_icon.png}"
+                         alt="" onclick="addCard()">
                     <label class="navbar-label">VOCABULARY TRAINER</label>
                 </div>
                 <form class="navbar-search-form">
@@ -41,15 +32,19 @@
         </div>
         <div class="content-row">
             <div class="col" th:each="card, iCard: ${cards}">
-                <div class="card">
-                    <img class="card-menu-img card-menu-img-edit" onclick="changeMode(this)"
+                <div class="dynamic card">
+                    <img class="dynamic dynamic-btm card-menu-img card-menu-img-edit" onclick="changeMode(this)"
                          th:src="@{/img/edit_icon.png}">
-                    <img class="card-menu-img card-menu-img-delete" th:src="@{/img/delete_icon.png}">
-                    <img class="card-img" th:src="${card.imageLinks[0].url}">
+                    <img class="dynamic dynamic-btm card-menu-img card-menu-img-delete"
+                         th:src="@{/img/delete_icon.png}">
+                    <div class="card-img-wrapper">
+                        <img class="card-img" th:src="${card.imageLinks[0].url}">
+                    </div>
                     <div class="card-header-content-wrapper">
                         <ul class="part-of-speech-list">
                             <li class="part-of-speech-item" th:each="meaning, iMean: ${card.meanings}">
-                                <button class="part-of-speech-btn" onclick="changePartOfSpeech(this)">
+                                <button class="part-of-speech-btn dynamic dynamic-btm"
+                                        onclick="changePartOfSpeech(this)">
                                     <input type="radio"
                                            class="part-of-speech-radio"
                                            th:if="${iMean.index == 0}"
@@ -83,9 +78,9 @@
                     </div>
                     <div class="card-footer-content-wrapper">
                         <div class="card-footer">
-                            <button class="card-footer-btn learn-btn"> learn</button>
-                            <button class="card-footer-btn repetition-btn"> repetition</button>
-                            <button class="card-footer-btn known-btn"> known</button>
+                            <button class="dynamic dynamic-btm card-footer-btn learn-btn"> learn</button>
+                            <button class="dynamic dynamic-btm card-footer-btn repetition-btn"> repetition</button>
+                            <button class="dynamic dynamic-btm card-footer-btn known-btn"> known</button>
                         </div>
                     </div>
                 </div>
@@ -93,79 +88,9 @@
         </div>
     </div>
 </div>
-<!-- /.container -->
 
+<script th:src="@{/scripts/main.js}"></script>
 <script th:inline="javascript">
-
-    function changeMode(btn) {
-
-    }
-
-    function changePartOfSpeech(btn) {
-
-        var input = $(btn).find(".part-of-speech-radio");
-        var partOfSpeech = $(btn).text().trim();;
-        var closeCard = input.closest(".card");
-        var definition = closeCard.find(".card-definition");
-        var listExamples = closeCard.find(".list-examples");
-        var word = closeCard.find(".card-word").text().trim();
-
-        var meaning = findMeaningByCardWordAndPartOfSpeech(word, partOfSpeech);
-
-        input.prop("checked", true);
-
-        setActiveButtonsClass();
-        changeDefinition(meaning, definition);
-        changeExamples(meaning, listExamples);
-    }
-
-    function changeDefinition(meaning, definition) {
-        definition.text(meaning.definitions[0].text);
-    }
-
-    function changeExamples(meaning, listExamples) {
-        listExamples.children(".list-examples-item").remove();
-
-        meaning.examples.forEach(example => {
-            var divStr = "<li class='list-examples-item'>" + example.text + "</li>";
-            var div = $(divStr);
-            listExamples.append(div[0]);
-        });
-    }
-
-    function findMeaningByCardWordAndPartOfSpeech(word, partOfSpeech) {
-        var meaning;
-
-        $.ajax({
-            type: "get",
-            url: "/meaning",
-            async: false,
-            data: {
-                word: word,
-                partOfSpeech: partOfSpeech
-            }
-        }).done(function (response) {
-            meaning = response;
-        });
-
-        return meaning;
-    }
-
-    function setActiveButtonsClass() {
-        var inputs = $(".part-of-speech-btn").children();
-
-        inputs.each(function () {
-
-            btn = $(this).parent();
-
-            if ($(this).prop('checked')) {
-                $(btn).addClass("active");
-            } else {
-                $(btn).removeClass("active");
-            }
-        });
-    }
-
     window.onload = function () {
         setActiveButtonsClass();
     };

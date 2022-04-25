@@ -17,11 +17,11 @@ public class Meaning extends AbstractEntity{
 
     public String partOfSpeech;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "meaning_id", referencedColumnName = "id")
     public Set<Definition> definitions;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "meaning_id", referencedColumnName = "id")
     public Set<Example> examples;
 

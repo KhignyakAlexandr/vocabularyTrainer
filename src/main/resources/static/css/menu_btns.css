@@ -1,0 +1,24 @@
+.card-menu-img{
+    position: absolute;
+    width: 20px;
+    height: 20px;
+}
+
+.card-menu-img-edit{
+    top: 15px;
+    right: 40px;
+}
+.card-menu-img-delete{
+    top: 15px;
+    right: 15px;
+}
+.card-menu-img-upload{
+    bottom: 15px;
+    right: 15px;
+}
+.card-menu-img-plus, card-menu-img-minus{
+    width: 15px;
+    height: 15px;
+    bottom: 0;
+    right: 5px;
+}

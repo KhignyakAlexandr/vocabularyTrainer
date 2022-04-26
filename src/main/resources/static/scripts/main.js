@@ -2,7 +2,18 @@ function changeMode(img) {
 
 }
 
-function addCard(){
+function deleteExample(img){
+    $(img).closest(".card-list-examples-item").remove();
+}
+
+function addExample(img) {
+    var listExamples = $(img).closest(".card-list-examples");
+    var emptyExample = getEmptyExample();
+    var divRow = $(emptyExample).find(".card-list-examples");
+    listExamples.append(divRow);
+}
+
+function addCard() {
     var row = $(".content-row");
     var emptyCardPage = getEmptyCardPage();
     var divRow = $(emptyCardPage).find(".content-row");
@@ -12,10 +23,10 @@ function addCard(){
 function changePartOfSpeech(btn) {
 
     var input = $(btn).find(".part-of-speech-radio");
-    var partOfSpeech = $(btn).text().trim();;
+    var partOfSpeech = $(btn).text().trim();
     var closeCard = input.closest(".card");
     var definition = closeCard.find(".card-definition");
-    var listExamples = closeCard.find(".list-examples");
+    var listExamples = closeCard.find(".card-list-examples");
     var word = closeCard.find(".card-word").text().trim();
 
     var meaning = getMeaningByCardWordAndPartOfSpeech(word, partOfSpeech);
@@ -32,10 +43,10 @@ function changeDefinition(meaning, definition) {
 }
 
 function changeExamples(meaning, listExamples) {
-    listExamples.children(".list-examples-item").remove();
+    listExamples.children(".card-list-examples-item").remove();
 
     meaning.examples.forEach(example => {
-        var divStr = "<li class='list-examples-item'>" + example.text + "</li>";
+        var divStr = "<li class='card-list-examples-item'>" + example.text + "</li>";
         var div = $(divStr);
         listExamples.append(div[0]);
     });
@@ -59,18 +70,32 @@ function getMeaningByCardWordAndPartOfSpeech(word, partOfSpeech) {
     return meaning;
 }
 
-function getEmptyCardPage(){
+function getEmptyCardPage() {
     var emptyCardPage;
 
     $.ajax({
         type: "get",
         url: "/empty_card",
         async: false
-    }).done(function (response){
+    }).done(function (response) {
         emptyCardPage = response;
     });
 
     return emptyCardPage;
+}
+
+function getEmptyExample() {
+    var emptyExample;
+
+    $.ajax({
+        type: "get",
+        url: "/empty_example",
+        async: false
+    }).done(function (response) {
+        emptyExample = response;
+    });
+
+    return emptyExample;
 }
 
 function setActiveButtonsClass() {

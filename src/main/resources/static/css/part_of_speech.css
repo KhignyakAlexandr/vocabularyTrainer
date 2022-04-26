@@ -1,0 +1,27 @@
+.part-of-speech-list{
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 5px;
+    flex-wrap: wrap;
+}
+.part-of-speech-item{
+    display:block;
+}
+.part-of-speech-btn{
+    display: block;
+    padding: 3px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    border: solid #000;
+    border-radius: 10px;
+    font-family: 'Akshar', sans-serif;
+    font-size: 15px;
+}
+.part-of-speech-btn:hover{
+    background-color: cornsilk;
+}
+.part-of-speech-btn.active{
+    background-color: cornsilk;
+    cursor: pointer;
+    transform: translateY(-1px);
+}

@@ -33,6 +33,7 @@ public class MainController {
 
     private static final String MAIN_PAGE = "main";
     private static final String EMPTY_CARD_PAGE = "empty_card";
+    private static final String EMPTY_EXAMPLE_PAGE = "empty_example";
     private static final String CARDS_ATTR = "cards";
 
     List<ImageLink> parseImageLinksFromPexelsAPI(String responseBody) {
@@ -196,8 +197,26 @@ public class MainController {
     }
 
     @GetMapping("/empty_card")
-    public String emptyCard(){
+    public String emptyCard(Model model){
+        String[] partsOfSpeech = new String[]{
+                "noun",
+                "pronoun",
+                "verb",
+                "adjective",
+                "adverb",
+                "preposition",
+                "conjunction",
+                "interjection"
+        };
+
+        model.addAttribute("partsOfSpeech", partsOfSpeech);
+
         return EMPTY_CARD_PAGE;
+    }
+
+    @GetMapping("/empty_example")
+    public String emptyExample(){
+        return EMPTY_EXAMPLE_PAGE;
     }
 
     @GetMapping("/meaning")

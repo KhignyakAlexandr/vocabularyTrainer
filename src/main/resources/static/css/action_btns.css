@@ -1,0 +1,54 @@
+.card-footer-btn{
+    padding: 5px;
+    width: 100%;
+    font-family: 'Akshar', sans-serif;
+    font-size: 20px;
+    border:0;
+    border-bottom: 2px solid #000000;
+}
+.card-footer-btn:hover {
+    color: white;
+}
+.learn-btn{
+    border-bottom-left-radius: 20px;
+    border-right: 3px solid rgba(0, 0, 0, 0.72);
+    color: #851d44b8;
+}
+.learn-btn:hover{
+    box-shadow: #851d44b8 0 8px 15px;
+    background-color: #851d44b8;
+}
+.repetition-btn{
+    color: #b2a923b5;
+}
+.repetition-btn:hover{
+    box-shadow: #b2a923b5 0 8px 15px;
+    background-color: #b2a923b5;
+}
+.known-btn{
+    border-bottom-right-radius: 20px;
+    border-left: 3px solid rgba(0, 0, 0, 0.72);
+    color: #588a1b;
+}
+.known-btn:hover{
+    box-shadow: #588a1b 0 8px 15px;
+    background-color: #588a1b;
+}
+.save-btn{
+    border-bottom-left-radius: 20px;
+    border-right: 2px solid rgba(0, 0, 0, 0.72);
+    color: #5096f7;
+}
+.save-btn:hover{
+    box-shadow: #5096f7 0 8px 15px;
+    background-color: #5096f7;
+}
+.cancel-btn{
+    border-bottom-right-radius: 20px;
+    border-left: 2px solid rgba(0, 0, 0, 0.72);
+    color: #860c0c;
+}
+.cancel-btn:hover{
+    box-shadow: #860c0c 0 8px 15px;
+    background-color: #860c0c;
+}

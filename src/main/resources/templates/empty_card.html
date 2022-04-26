@@ -14,8 +14,32 @@
     <div class="content-row">
         <div class="col">
             <div class="dynamic card">
-                <div class="card-img-wrapper"></div>
+                <div class="card-img-wrapper">
+                    <img class="card-img" th:src="@{/img/empty_image.png}">
+                    <img class="dynamic dynamic-btm card-menu-img card-menu-img-upload"
+                         th:src="@{/img/upload_image_icon.png}">
+                </div>
                 <div class="card-header-content-wrapper">
+                    <ul class="part-of-speech-list">
+                        <li class="part-of-speech-item" th:each="partOfSpeech, iMean: ${partsOfSpeech}">
+                            <button class="part-of-speech-btn dynamic dynamic-btm"
+                                    onclick="changePartOfSpeech(this)">
+                                <input type="radio"
+                                       class="part-of-speech-radio"
+                                       th:if="${iMean.index == 0}"
+                                       th:name="'options0'"
+                                       th:id="'option' + (${iMean.index} + 1)"
+                                       th:text="${partOfSpeech}"
+                                       checked>
+                                <input type="radio"
+                                       class="part-of-speech-radio"
+                                       th:if="${iMean.index != 0}"
+                                       th:name="'options0'"
+                                       th:id="'option' + (${iMean.index} + 1)"
+                                       th:text="${partOfSpeech}">
+                            </button>
+                        </li>
+                    </ul>
                     <div class="card-header">
                         <div class="card-title-wrapper">
                             <input type="text" class="input-card input-card-half" placeholder="Word">
@@ -25,7 +49,21 @@
                     </div>
                 </div>
                 <div class="card-middle-content-wrapper">
-                    <input type="text" class="input-card input-card-full" placeholder="Example">
+                    <ul class="card-list-examples">
+                        <li class="block card-list-examples-item">
+                            <div class="card-examples-wrapper">
+                                <input type="text" class="input-card input-card-pre-full" placeholder="Example">
+                                <img class="dynamic dynamic-btm card-menu-img card-menu-img-plus"
+                                     th:src="@{/img/plus_icon.png}" onclick="addExample(this)">
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-footer-content-wrapper">
+                    <div class="card-footer">
+                        <button class="card-footer-btn save-btn">SAVE</button>
+                        <button class="card-footer-btn cancel-btn">CANCEL</button>
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,0 +1,48 @@
+.navbar{
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #212529;
+    border-bottom-right-radius: 20px;
+}
+.navbar-brand{
+    display: flex;
+    align-items: center;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.navbar-hamburger-img{
+    height: 30px;
+    width: 30px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.navbar-label{
+    padding-left: 5px;
+    padding-right: 5px;
+    font-family: 'Akshar', sans-serif;
+    color: white;
+    font-size: 25px;
+}
+
+.navbar-search-form{
+    padding-left: 20px;
+    padding-right: 20px;
+    display: flex;
+    align-items: center;
+}
+.navbar-search-input{
+    height: 30px;
+    width: 150px;
+    border-radius: 10px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+.navbar-search-btn{
+    height: 25px;
+    padding-left: 10px;
+    padding-right: 10px;
+}

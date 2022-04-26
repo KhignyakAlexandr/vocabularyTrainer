@@ -1,0 +1,15 @@
+input.input-card{
+    border: none;
+    border-bottom: 1px solid #000;
+    outline: none;
+    background: transparent;
+}
+input.input-card-half{
+    width: 45%;
+}
+input.input-card-pre-full{
+    width: 90%;
+}
+input.input-card-full{
+    width: 100%;
+}

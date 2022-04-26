@@ -33,14 +33,16 @@
         <div class="content-row">
             <div class="col" th:each="card, iCard: ${cards}">
                 <div class="dynamic card">
-                    <img class="dynamic dynamic-btm card-menu-img card-menu-img-edit" onclick="changeMode(this)"
-                         th:src="@{/img/edit_icon.png}">
-                    <img class="dynamic dynamic-btm card-menu-img card-menu-img-delete"
-                         th:src="@{/img/delete_icon.png}">
                     <div class="card-img-wrapper">
+                        <img class="dynamic dynamic-btm card-menu-img card-menu-img-edit" onclick="changeMode(this)"
+                             th:src="@{/img/edit_icon.png}">
+                        <img class="dynamic dynamic-btm card-menu-img card-menu-img-delete"
+                             th:src="@{/img/delete_icon.png}">
                         <img class="card-img" th:src="${card.imageLinks[0].url}">
                     </div>
                     <div class="card-header-content-wrapper">
+                        <div class="dynamic dynamic-btm card-menu-img card-menu-synonym">S</div>
+                        <div class="dynamic dynamic-btm card-menu-img card-menu-antonym">A</div>
                         <ul class="part-of-speech-list">
                             <li class="part-of-speech-item" th:each="meaning, iMean: ${card.meanings}">
                                 <button class="part-of-speech-btn dynamic dynamic-btm"
@@ -70,17 +72,17 @@
                         </div>
                     </div>
                     <div class="card-middle-content-wrapper">
-                        <ul class="list-examples">
-                            <li class="list-examples-item" th:each="example: ${card.meanings[0].examples}"
+                        <ul class="card-list-examples">
+                            <li class="card-list-examples-item" th:each="example: ${card.meanings[0].examples}"
                                 th:text="${example.text}">
                             </li>
                         </ul>
                     </div>
                     <div class="card-footer-content-wrapper">
                         <div class="card-footer">
-                            <button class="dynamic dynamic-btm card-footer-btn learn-btn"> learn</button>
-                            <button class="dynamic dynamic-btm card-footer-btn repetition-btn"> repetition</button>
-                            <button class="dynamic dynamic-btm card-footer-btn known-btn"> known</button>
+                            <button class="card-footer-btn learn-btn"> LEARN</button>
+                            <button class="card-footer-btn repetition-btn"> REPETITION</button>
+                            <button class="card-footer-btn known-btn"> KNOWN</button>
                         </div>
                     </div>
                 </div>

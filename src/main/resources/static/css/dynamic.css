@@ -1,0 +1,11 @@
+.dynamic-btm{
+    cursor: pointer;
+}
+.dynamic{
+    transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+    touch-action: manipulation;
+    will-change: transform;
+}
+.dynamic:hover{
+    transform: translateY(-2px);
+}

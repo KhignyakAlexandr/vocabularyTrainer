@@ -2,15 +2,21 @@ function changeMode(img) {
 
 }
 
-function deleteExample(img){
-    $(img).closest(".card-list-examples-item").remove();
-}
-
-function addExample(img) {
+function addExampleFromImage(img) {
     var listExamples = $(img).closest(".card-list-examples");
     var emptyExample = getEmptyExample();
     var divRow = $(emptyExample).find(".card-list-examples");
     listExamples.append(divRow);
+}
+
+function addExample(listExamples, value) {
+    var emptyExample = getEmptyExample(value);
+    var divRow = $(emptyExample).find(".card-list-examples");
+    listExamples.append(divRow);
+}
+
+function deleteExample(img) {
+    $(img).closest(".card-list-examples-item").remove();
 }
 
 function addCard() {
@@ -18,6 +24,13 @@ function addCard() {
     var emptyCardPage = getEmptyCardPage();
     var divRow = $(emptyCardPage).find(".content-row");
     row.prepend(divRow);
+}
+
+function deleteCard(img) {
+    var closeCol = $(img).closest(".col");
+    var word = closeCol.find(".card-word").text().trim();
+    closeCol.remove();
+    deleteCardByWord(word);
 }
 
 function changePartOfSpeech(btn) {
@@ -39,7 +52,7 @@ function changePartOfSpeech(btn) {
 }
 
 function changeDefinition(meaning, definition) {
-    definition.text(meaning.definitions[0].text);
+    definition.text(meaning.definition);
 }
 
 function changeExamples(meaning, listExamples) {
@@ -50,52 +63,6 @@ function changeExamples(meaning, listExamples) {
         var div = $(divStr);
         listExamples.append(div[0]);
     });
-}
-
-function getMeaningByCardWordAndPartOfSpeech(word, partOfSpeech) {
-    var meaning;
-
-    $.ajax({
-        type: "get",
-        url: "/meaning",
-        async: false,
-        data: {
-            word: word,
-            partOfSpeech: partOfSpeech
-        }
-    }).done(function (response) {
-        meaning = response;
-    });
-
-    return meaning;
-}
-
-function getEmptyCardPage() {
-    var emptyCardPage;
-
-    $.ajax({
-        type: "get",
-        url: "/empty_card",
-        async: false
-    }).done(function (response) {
-        emptyCardPage = response;
-    });
-
-    return emptyCardPage;
-}
-
-function getEmptyExample() {
-    var emptyExample;
-
-    $.ajax({
-        type: "get",
-        url: "/empty_example",
-        async: false
-    }).done(function (response) {
-        emptyExample = response;
-    });
-
-    return emptyExample;
 }
 
 function setActiveButtonsClass() {

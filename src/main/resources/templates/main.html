@@ -22,7 +22,7 @@
                 <div class="navbar-brand">
                     <img class="dynamic dynamic-btm navbar-hamburger-img" th:src="@{/img/hamburger_menu_icon.png}"
                          alt="" onclick="addCard()">
-                    <label class="navbar-label">VOCABULARY TRAINER</label>
+                    <label class="navbar-label">VOCABULARY TRAINER</label> //
                 </div>
                 <form class="navbar-search-form">
                     <input class="navbar-search-input" type="search" placeholder="Search">
@@ -36,7 +36,7 @@
                     <div class="card-img-wrapper">
                         <img class="dynamic dynamic-btm card-menu-img card-menu-img-edit" onclick="changeMode(this)"
                              th:src="@{/img/edit_icon.png}">
-                        <img class="dynamic dynamic-btm card-menu-img card-menu-img-delete"
+                        <img class="dynamic dynamic-btm card-menu-img card-menu-img-delete" onclick="deleteCard(this)"
                              th:src="@{/img/delete_icon.png}">
                         <img class="card-img" th:src="${card.imageLinks[0].url}">
                     </div>
@@ -45,18 +45,20 @@
                         <div class="dynamic dynamic-btm card-menu-img card-menu-antonym">A</div>
                         <ul class="part-of-speech-list">
                             <li class="part-of-speech-item" th:each="meaning, iMean: ${card.meanings}">
-                                <button class="part-of-speech-btn dynamic dynamic-btm"
+                                <button th:if="${iMean.index == 0}"
+                                        class="active part-of-speech-btn dynamic dynamic-btm"
                                         onclick="changePartOfSpeech(this)">
                                     <input type="radio"
                                            class="part-of-speech-radio"
-                                           th:if="${iMean.index == 0}"
                                            th:name="'options' + (${iCard.index} + 1)"
                                            th:id="'option' + (${iMean.index} + 1)"
                                            th:text="${meaning.partOfSpeech}"
                                            checked>
+                                </button>
+                                <button th:if="${iMean.index != 0}" class="part-of-speech-btn dynamic dynamic-btm"
+                                        onclick="changePartOfSpeech(this)">
                                     <input type="radio"
                                            class="part-of-speech-radio"
-                                           th:if="${iMean.index != 0}"
                                            th:name="'options' + (${iCard.index} + 1)"
                                            th:id="'option' + (${iMean.index} + 1)"
                                            th:text="${meaning.partOfSpeech}">
@@ -68,7 +70,7 @@
                                 <h5 class="card-word" th:text="${card.word}"></h5>
                                 <h5 class="card-transcription" th:text="${card.transcription}"></h5>
                             </div>
-                            <p class="card-definition" th:text="${card.meanings[0].definitions[0].text}"></p>
+                            <p class="card-definition" th:text="${card.meanings[0].definition}"></p>
                         </div>
                     </div>
                     <div class="card-middle-content-wrapper">
@@ -92,10 +94,7 @@
 </div>
 
 <script th:src="@{/scripts/main.js}"></script>
-<script th:inline="javascript">
-    window.onload = function () {
-        setActiveButtonsClass();
-    };
-</script>
+<script th:src="@{/scripts/ajax.js}"></script>
+<script th:src="@{/scripts/cardRegistration.js}"></script>
 </body>
 </html>

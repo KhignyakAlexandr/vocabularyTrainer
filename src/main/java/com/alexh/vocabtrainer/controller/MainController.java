@@ -2,6 +2,7 @@ package com.alexh.vocabtrainer.controller;
 
 import com.alexh.vocabtrainer.dtos.DictionaryDto;
 import com.alexh.vocabtrainer.entities.*;
+import com.alexh.vocabtrainer.forms.PartOfSpeechRegistrationForm;
 import com.alexh.vocabtrainer.repositories.CardRepository;
 import com.alexh.vocabtrainer.repositories.MeaningRepository;
 import com.squareup.okhttp.OkHttpClient;
@@ -11,16 +12,13 @@ import lombok.SneakyThrows;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Controller
 public class MainController {
@@ -86,10 +84,10 @@ public class MainController {
             JSONObject meaning = meaningsJson.getJSONObject(i);
 
             String partOfSpeech = meaning.optString("partOfSpeech");
+            String definition = null;
             List<Antonym> antonyms = new ArrayList<>();
             List<Synonym> synonyms = new ArrayList<>();
-            Set<Definition> definitions = new HashSet<>();
-            Set<Example> examples = new HashSet<>();
+            List<Example> examples = new ArrayList<>();
 
             JSONArray antonymsJson = meaning.getJSONArray("antonyms");
             for (int a = 0; a < antonymsJson.length(); a++) {
@@ -113,16 +111,16 @@ public class MainController {
 
             JSONArray definitionsJson = meaning.getJSONArray("definitions");
             for (int d = 0; d < definitionsJson.length(); d++) {
-                JSONObject definition = definitionsJson.getJSONObject(d);
+                JSONObject definitionJSON = definitionsJson.getJSONObject(d);
 
-                String definitionOpt = definition.optString("definition");
-                if (!definitionOpt.isEmpty()) {
-                    definitions.add(new Definition().builder()
-                            .text(definitionOpt)
-                            .build());
+                if(d == 0) {
+                    String definitionOpt = definitionJSON.optString("definition");
+                    if (!definitionOpt.isEmpty()){
+                        definition = definitionOpt;
+                    }
                 }
 
-                String exampleOpt = definition.optString("example");
+                String exampleOpt = definitionJSON.optString("example");
                 if (!exampleOpt.isEmpty()) {
                     examples.add(new Example().builder()
                             .text(exampleOpt)
@@ -132,7 +130,7 @@ public class MainController {
 
             meanings.add(Meaning.builder()
                     .partOfSpeech(partOfSpeech)
-                    .definitions(definitions)
+                    .definition(definition)
                     .examples(examples)
                     .antonyms(antonyms)
                     .synonyms(synonyms)
@@ -175,7 +173,7 @@ public class MainController {
         return parseMeaningsFromDictionaryAPI(responseBody);
     }
 
-    Card createCard(String word) {
+    Card createOfferCard(String word) {
         DictionaryDto dictionaryDto = getDictionaryDto(word);
         List<AudioLink> audioLinks = new ArrayList<>();
         audioLinks.add(dictionaryDto.audioLink);
@@ -197,7 +195,7 @@ public class MainController {
     }
 
     @GetMapping("/empty_card")
-    public String emptyCard(Model model){
+    public String emptyCard(Model model) {
         String[] partsOfSpeech = new String[]{
                 "noun",
                 "pronoun",
@@ -214,15 +212,70 @@ public class MainController {
         return EMPTY_CARD_PAGE;
     }
 
+    @GetMapping("/example")
+    public String emptyExample(@RequestParam("example") String example, Model model) {
+        model.addAttribute("example", example);
+        return EMPTY_EXAMPLE_PAGE;
+    }
+
     @GetMapping("/empty_example")
-    public String emptyExample(){
+    public String emptyExample(Model model) {
+        model.addAttribute("example", null);
         return EMPTY_EXAMPLE_PAGE;
     }
 
     @GetMapping("/meaning")
     @ResponseBody
     public Meaning findExamples(@RequestParam("word") String word,
-                               @RequestParam("partOfSpeech") String partOfSpeech) {
-        return meaningRepository.findByCardWordAndPartOfSpeech(word,partOfSpeech).get();
+                                @RequestParam("partOfSpeech") String partOfSpeech) {
+        return meaningRepository.findByCardWordAndPartOfSpeech(word, partOfSpeech).get();
+    }
+
+    @GetMapping("/delete_card")
+    @Transactional
+    public String deleteCard(@RequestParam("word") String word) {
+        cardRepository.deleteByWord(word);
+        return "forward:/";
+    }
+
+    @PostMapping(value = "/add_card", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public String addCard(@RequestBody  Map<String, PartOfSpeechRegistrationForm> partOfSpeechMap) {
+        String nounWord = partOfSpeechMap.get("noun").word;
+        String nounTranscription = partOfSpeechMap.get("noun").transcription;
+
+        Card offerCard = createOfferCard(nounWord);
+
+        List<Meaning> meanings = new ArrayList<>();
+
+        partOfSpeechMap.keySet().forEach(k -> {
+            String definition = partOfSpeechMap.get(k).definition;
+            List<String> examples = partOfSpeechMap.get(k).examples;
+
+            List<Example> exampleEntities = new ArrayList<>();
+
+            examples.forEach(e -> exampleEntities.add(Example.builder()
+                    .text(e)
+                    .build())
+            );
+
+            meanings.add(Meaning.builder()
+                    .partOfSpeech(k)
+                    .definition(definition)
+                    .examples(exampleEntities)
+                    .build()
+            );
+        });
+
+        Card card = Card.builder()
+                .word(nounWord)
+                .transcription(nounTranscription)
+                .audioLinks(offerCard.audioLinks)
+                .meanings(meanings)
+                .imageLinks(offerCard.imageLinks)
+                .build();
+
+        cardRepository.save(card);
+
+        return "forward:/";
     }
 }

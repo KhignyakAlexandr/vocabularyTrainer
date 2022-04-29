@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Set;
 
 @Builder
 @Entity
@@ -17,13 +16,11 @@ public class Meaning extends AbstractEntity{
 
     public String partOfSpeech;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "meaning_id", referencedColumnName = "id")
-    public Set<Definition> definitions;
+    public String definition;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "meaning_id", referencedColumnName = "id")
-    public Set<Example> examples;
+    public List<Example> examples;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "meaning_id", referencedColumnName = "id")

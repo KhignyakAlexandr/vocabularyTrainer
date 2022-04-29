@@ -9,7 +9,7 @@
         <ul class="card-list-examples">
             <li class="block card-list-examples-item">
                 <div class="card-examples-wrapper">
-                    <input type="text" class="input-card input-card-pre-full" placeholder="Example">
+                    <input type="text" class="input-card input-card-list-examples-item input-card-pre-full" th:value="${example}" placeholder="Example">
                     <img class="dynamic dynamic-btm card-menu-img card-menu-img-plus"
                          th:src="@{/img/minus_icon.png}" onclick="deleteExample(this)">
                 </div>
